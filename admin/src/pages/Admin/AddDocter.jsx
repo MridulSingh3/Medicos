@@ -66,177 +66,167 @@ const AddDoctor = () => {
     } catch (error) {
       console.error('Add Doctor Error:', error);
       toast.error(error?.response?.data?.message || 'Something went wrong!');
-
     }
   };
 
-  const styles = {
-    container: {
-      padding: '10px 30px',
-      paddingLeft: '250px',
-      backgroundColor: '#f5f5f5',
-      minHeight: '100vh',
-      boxSizing: 'border-box',
-    },
-    form: {
-      background: 'white',
-      padding: '30px',
-      borderRadius: '10px',
-      boxShadow: '0 15px 30px rgba(0, 0, 0, 0.2)',
-      maxWidth: '1000px',
-      margin: '0 auto',
-    },
-    heading: {
-      fontSize: '24px',
-      fontWeight: '600',
-      marginBottom: '30px',
-      textAlign: 'center',
-    },
-    uploadSection: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '20px',
-      marginBottom: '30px',
-    },
-    labelImg: {
-      cursor: 'pointer',
-    },
-    row: {
-      display: 'flex',
-      gap: '40px',
-      flexWrap: 'wrap',
-      marginBottom: '30px',
-    },
-    column: {
-      flex: 1,
-      minWidth: '300px',
-    },
-    field: {
-      marginBottom: '20px',
-    },
-    label: {
-      display: 'block',
-      fontWeight: '500',
-      marginBottom: '6px',
-      color: '#333',
-    },
-    input: {
-      width: '100%',
-      padding: '10px',
-      border: '1px solid #ccc',
-      borderRadius: '6px',
-      fontSize: '14px',
-    },
-    select: {
-      width: '100%',
-      padding: '10px',
-      border: '1px solid #ccc',
-      borderRadius: '6px',
-      fontSize: '14px',
-    },
-    textarea: {
-      width: '100%',
-      padding: '10px',
-      border: '1px solid #ccc',
-      borderRadius: '6px',
-      fontSize: '14px',
-      resize: 'none',
-    },
-    button: {
-      width: '100%',
-      padding: '12px',
-      backgroundColor: '#1976d2',
-      color: 'white',
-      fontSize: '16px',
-      fontWeight: '600',
-      border: 'none',
-      borderRadius: '6px',
-      cursor: 'pointer',
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <form style={styles.form} onSubmit={onSubmitHandler}>
-        <h2 style={styles.heading}>Add Doctor</h2>
+    <div className="p-4 sm:p-8 bg-gray-50 min-h-screen w-full">
+      <form onSubmit={onSubmitHandler} className="bg-white p-6 sm:p-10 rounded-2xl shadow-lg max-w-4xl mx-auto border border-gray-100">
 
-        <div style={styles.uploadSection}>
-          <label htmlFor="doc-img" style={styles.labelImg}>
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Add New Doctor</h2>
+
+        {/* Upload Doctor Image */}
+        <div className="flex items-center gap-4 mb-8">
+          <label htmlFor="doc-img" className="cursor-pointer group relative">
             <img
               src={docImg ? URL.createObjectURL(docImg) : assets.upload_area}
               alt="Upload Doctor"
-              width="80"
+              className="w-20 h-20 rounded-full object-cover border-2 border-dashed border-gray-300 group-hover:border-blue-500 transition-colors"
             />
           </label>
           <input onChange={(e) => setDocImg(e.target.files[0])} type="file" id="doc-img" hidden />
-          <p>Upload doctor picture</p>
+          <p className="text-sm font-medium text-gray-600">Upload doctor picture</p>
         </div>
 
-        <div style={styles.row}>
-          <div style={styles.column}>
-            <div style={styles.field}>
-              <label style={styles.label}>Doctor Name</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} type="text" required placeholder="Name" style={styles.input} />
+        {/* Two-Column Form Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+          {/* Left Column */}
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Doctor Name</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                required
+                placeholder="Doctor Name"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Email</label>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required placeholder="Email" style={styles.input} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                required
+                placeholder="Doctor Email"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Password</label>
-              <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required placeholder="Password" style={styles.input} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                required
+                placeholder="Password"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Experience</label>
-              <select value={experience} onChange={(e) => setExperience(e.target.value)} style={styles.select}>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Experience</label>
+              <select
+                value={experience}
+                onChange={(e) => setExperience(e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white transition-all"
+              >
                 {["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "10+"].map((yr) => (
                   <option key={yr} value={`${yr} Year`}>{yr} Year</option>
                 ))}
               </select>
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Fees</label>
-              <input value={fees} onChange={(e) => setFees(e.target.value)} type="number" required placeholder="Fees" style={styles.input} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fees</label>
+              <input
+                value={fees}
+                onChange={(e) => setFees(e.target.value)}
+                type="number"
+                required
+                placeholder="Consultation Fees"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
           </div>
 
-          <div style={styles.column}>
-            <div style={styles.field}>
-              <label style={styles.label}>Speciality</label>
-              <select value={speciality} onChange={(e) => setSpeciality(e.target.value)} style={styles.select}>
-                {["General Physician", "Gynecologist", "Dermatologist", "Pediatrician", "Neurologist", "Gastroenterologist"].map(spec => (
+          {/* Right Column */}
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Speciality</label>
+              <select
+                value={speciality}
+                onChange={(e) => setSpeciality(e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white transition-all"
+              >
+                {["General Physician", "Gynecologist", "Dermatologist", "Pediatrician", "Neurologist", "Gastroenterologist"].map((spec) => (
                   <option key={spec} value={spec}>{spec}</option>
                 ))}
               </select>
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Education</label>
-              <input value={degree} onChange={(e) => setDegree(e.target.value)} type="text" required placeholder="Degree / Qualification" style={styles.input} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Education</label>
+              <input
+                value={degree}
+                onChange={(e) => setDegree(e.target.value)}
+                type="text"
+                required
+                placeholder="Degree / Qualification"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Address Line 1</label>
-              <input value={address1} onChange={(e) => setAddress1(e.target.value)} type="text" required placeholder="Address Line 1" style={styles.input} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Address Line 1</label>
+              <input
+                value={address1}
+                onChange={(e) => setAddress1(e.target.value)}
+                type="text"
+                required
+                placeholder="Address Line 1"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Address Line 2</label>
-              <input value={address2} onChange={(e) => setAddress2(e.target.value)} type="text" placeholder="Address Line 2" style={styles.input} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Address Line 2</label>
+              <input
+                value={address2}
+                onChange={(e) => setAddress2(e.target.value)}
+                type="text"
+                placeholder="Address Line 2"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              />
             </div>
           </div>
         </div>
 
-        <div style={styles.field}>
-          <label style={styles.label}>About</label>
+        {/* About Section */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">About Doctor</label>
           <textarea
             value={about}
             onChange={(e) => setAbout(e.target.value)}
             required
-            rows={5}
-            placeholder="Write about doctor"
-            style={styles.textarea}
+            rows={4}
+            placeholder="Write about doctor experience, background, etc."
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-all"
           />
         </div>
 
-        <button type="submit" style={styles.button}>Add Doctor</button>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md active:scale-[0.99] transition-all duration-200"
+        >
+          Add Doctor
+        </button>
       </form>
 
       <ToastContainer position="top-right" autoClose={2000} />

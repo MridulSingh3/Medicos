@@ -98,52 +98,52 @@ const Appointment = () => {
   };
 
   const bookAppointment = async () => {
-  if (!token) {
-    toast.warn('Please login to book an appointment.');
-    return navigate('/login');
-  }
-
-  try {
-    const selectedDate = docSlots[slotIndex][0].datetime;
-    const slotDate = selectedDate.toISOString().split('T')[0]; // ✅ "YYYY-MM-DD"
-    const userId = JSON.parse(localStorage.getItem("user"))?._id;
-    console.log("Booking Payload ✅", {
-  userId,
-  doctorId: docId,
-  slotDate,
-  slotTime,
-  amount: docInfo?.fees,
-});
-
-    const { data } = await axios.post(
-  `${backendUrl}/api/user/book-appointment`,
-  {
-    userId,
-    doctorId: docId,
-    slotDate,
-    slotTime,
-    amount: docInfo.fees,
-  },
-  {
-    headers: { Authorization: `Bearer ${token}` },
-  }
-);
-
-    
-
-    if (data.success) {
-      toast.success(data.message);
-      await refetchDoctorInfo();
-      getDoctorsData();
-      navigate('/my-appointments');
-    } else {
-      toast.error(data.message);
+    if (!token) {
+      toast.warn('Please login to book an appointment.');
+      return navigate('/login');
     }
-  } catch (err) {
-    console.error(err);
-    toast.error(err?.response?.data?.message || "Something went wrong!");
-  }
-};
+
+    try {
+      const selectedDate = docSlots[slotIndex][0].datetime;
+      const slotDate = selectedDate.toISOString().split('T')[0]; // ✅ "YYYY-MM-DD"
+      const userId = JSON.parse(localStorage.getItem("user"))?._id;
+      console.log("Booking Payload ✅", {
+        userId,
+        doctorId: docId,
+        slotDate,
+        slotTime,
+        amount: docInfo?.fees,
+      });
+
+      const { data } = await axios.post(
+        `${backendUrl}/api/user/book-appointment`,
+        {
+          userId,
+          doctorId: docId,
+          slotDate,
+          slotTime,
+          amount: docInfo.fees,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+
+
+      if (data.success) {
+        toast.success(data.message);
+        await refetchDoctorInfo();
+        getDoctorsData();
+        navigate('/my-appointments');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.response?.data?.message || "Something went wrong!");
+    }
+  };
 
   if (!docInfo) return <p style={{ textAlign: 'center' }}>Loading doctor info...</p>;
 

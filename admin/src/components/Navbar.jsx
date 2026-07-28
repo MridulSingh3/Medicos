@@ -15,46 +15,24 @@ const Navbar = () => {
     }
   };
 
-  const styles = {
-    navbar: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '12px 24px',
-      background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
-      color: 'white',
-      boxShadow: '0 4px 8px rgba(119, 127, 213, 0.17)',
-    },
-    roleText: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-    },
-    button: {
-      padding: '8px 16px',
-      backgroundColor: '#e53935',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '6px',
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      transition: 'background-color 0.3s ease',
-    },
-    buttonHover: {
-      backgroundColor: '#d32f2f',
-    },
-  };
-
   return (
-    <div style={styles.navbar}>
-      <p style={styles.roleText}>{aToken ? 'Admin' : 'Docter'}</p>
+    <div className="flex justify-between items-center px-6 py-3 bg-gradient-to-r from-[#0f2027] via-[#203a43] to-[#2c5364] text-white shadow-md">
+
+      {/* Role Badge / Logo Section */}
+      <div className="flex items-center gap-2">
+        <p className="text-xl font-bold tracking-wide">
+          {aToken ? 'Admin' : 'Doctor'}
+        </p>
+      </div>
+
+      {/* Logout Button */}
       <button
-        style={styles.button}
         onClick={logout}
-        onMouseOver={(e) => (e.target.style.backgroundColor = styles.buttonHover.backgroundColor)}
-        onMouseOut={(e) => (e.target.style.backgroundColor = styles.button.backgroundColor)}
+        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-sm rounded-lg transition-colors duration-300 active:scale-95 shadow-sm"
       >
         Logout
       </button>
+
     </div>
   );
 };

@@ -1,215 +1,159 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../context/AppContext';
-// import logo from '../assets/medicos_logo.png'; // Replace with actual logo path
-import axios from 'axios'
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const {backendUrl, token, setToken} = useContext(AppContext)
-  const navigate = useNavigate()
+  const { backendUrl, token, setToken } = useContext(AppContext);
+  const navigate = useNavigate();
   const [state, setState] = useState('Sign Up');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
   const onSubmitHandler = async (event) => {
-  event.preventDefault();
-  try {
-    if (state === 'Sign Up') {
-      const { data } = await axios.post(`${backendUrl}/api/user/register`, {
-        name,
-        email,
-        password,
-      });
+    event.preventDefault();
+    try {
+      if (state === 'Sign Up') {
+        const { data } = await axios.post(`${backendUrl}/api/user/register`, {
+          name,
+          email,
+          password,
+        });
 
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setToken(data.token);
-        toast.success('Registration successful');
-        setState('Login'); // Optional: switch to login screen
+        if (data.success) {
+          localStorage.setItem('token', data.token);
+          setToken(data.token);
+          toast.success('Registration successful');
+          setState('Login');
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
-      }
-    } else {
-      const { data } = await axios.post(`${backendUrl}/api/user/login`, {
-        email,
-        password,
-      });
+        const { data } = await axios.post(`${backendUrl}/api/user/login`, {
+          email,
+          password,
+        });
 
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setToken(data.token);
-        toast.success('Login successful');
-      } else {
-        toast.error(data.message || 'Login failed');
+        if (data.success) {
+          localStorage.setItem('token', data.token);
+          setToken(data.token);
+          toast.success('Login successful');
+        } else {
+          toast.error(data.message || 'Login failed');
+        }
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
     }
-  } catch (error) {
-    toast.error(error.response?.data?.message || error.message);
-  }
-};
+  };
 
-  useEffect(()=>{
-    if(token){
-      navigate('/')
+  useEffect(() => {
+    if (token) {
+      navigate('/');
     }
-  },[token])
+  }, [token, navigate]);
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f0f4f8',
-        padding: '20px',
-      }}
-    >
+    <div className="min-h-[80vh] flex items-center justify-center py-10 px-4">
       <form
         onSubmit={onSubmitHandler}
-        style={{
-          width: '100%',
-          maxWidth: '420px',
-          backgroundColor: '#ffffff',
-          padding: '40px 30px',
-          borderRadius: '12px',
-          boxShadow: '0 12px 40px rgba(0, 0, 0, 0.35)',
-          textAlign: 'center',
-        }}
+        className="flex flex-col gap-4 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border border-gray-200 rounded-2xl text-gray-600 text-sm shadow-lg bg-white"
       >
-      <div
-  style={{
-    background: 'linear-gradient(to right, #ffffff, #e0f0ff)', // white to bluish
-    padding: '40px 20px',
-    textAlign: 'center',
-    borderRadius: '12px',
-    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-    fontFamily: `'Poppins', 'Segoe UI', sans-serif`, // attractive modern font
-  }}
->
-  <h1
-    style={{
-      fontSize: '42px',
-      background: 'linear-gradient(to right, #007BFF, #00C6FF)', // gradient text
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      fontWeight: '700',
-      letterSpacing: '1px',
-      margin: 0,
-    }}
-  >
-    Medicos
-  </h1>
-</div>
-
+        {/* Branding Header */}
+        <div className="w-full text-center pb-2 border-b border-gray-100">
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent tracking-wide">
+            Medicos
+          </h1>
+        </div>
 
         {/* Heading */}
-        <h2 style={{ marginBottom: '8px' }}>
-          {state === 'Sign Up' ? 'Create Account' : 'Login'}
-        </h2>
-        <p style={{ color: '#666', fontSize: '14px', marginBottom: '24px' }}>
-          Please {state === 'Sign Up' ? 'sign up' : 'log in'} to book an appointment
-        </p>
+        <div className="w-full">
+          <p className="text-2xl font-bold text-gray-800">
+            {state === 'Sign Up' ? 'Create Account' : 'Login'}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Please {state === 'Sign Up' ? 'sign up' : 'log in'} to book an appointment
+          </p>
+        </div>
 
         {/* Name Field (Only in Sign Up) */}
         {state === 'Sign Up' && (
-          <div style={{ textAlign: 'left', marginBottom: '16px' }}>
-            <label style={{ fontSize: '14px', fontWeight: '500' }}>Full Name</label>
+          <div className="w-full">
+            <label className="font-medium text-gray-700">Full Name</label>
             <input
               type="text"
               onChange={(e) => setName(e.target.value)}
               value={name}
               required
               placeholder="Enter your full name"
-              style={inputStyle}
+              className="border border-gray-300 rounded-lg w-full p-2.5 mt-1 focus:outline-none focus:border-blue-500 text-gray-800"
             />
           </div>
         )}
 
         {/* Email Field */}
-        <div style={{ textAlign: 'left', marginBottom: '16px' }}>
-          <label style={{ fontSize: '14px', fontWeight: '500' }}>Email</label>
+        <div className="w-full">
+          <label className="font-medium text-gray-700">Email</label>
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             required
             placeholder="Enter your email"
-            style={inputStyle}
+            className="border border-gray-300 rounded-lg w-full p-2.5 mt-1 focus:outline-none focus:border-blue-500 text-gray-800"
           />
         </div>
 
         {/* Password Field */}
-        <div style={{ textAlign: 'left', marginBottom: '24px' }}>
-          <label style={{ fontSize: '14px', fontWeight: '500' }}>Password</label>
+        <div className="w-full">
+          <label className="font-medium text-gray-700">Password</label>
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             required
             placeholder="Enter your password"
-            style={inputStyle}
+            className="border border-gray-300 rounded-lg w-full p-2.5 mt-1 focus:outline-none focus:border-blue-500 text-gray-800"
           />
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#007BFF',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '16px',
-            fontWeight: '500',
-            cursor: 'pointer',
-          }}
+          className="bg-blue-600 text-white w-full py-2.5 rounded-lg text-base font-semibold hover:bg-blue-700 transition-all active:scale-95 shadow-md mt-2"
         >
           {state === 'Sign Up' ? 'Create Account' : 'Login'}
         </button>
 
-        {/* Switch State */}
-        <p style={{ marginTop: '20px', fontSize: '14px' }}>
+        {/* Switch State Toggle */}
+        <div className="w-full text-center text-xs text-gray-600 mt-2">
           {state === 'Sign Up' ? (
-            <>
+            <p>
               Already have an account?{' '}
               <span
                 onClick={() => setState('Login')}
-                style={{ color: '#007BFF', cursor: 'pointer', fontWeight: '500' }}
+                className="text-blue-600 underline cursor-pointer font-semibold"
               >
                 Login here
               </span>
-            </>
+            </p>
           ) : (
-            <>
+            <p>
               Don't have an account?{' '}
               <span
                 onClick={() => setState('Sign Up')}
-                style={{ color: '#007BFF', cursor: 'pointer', fontWeight: '500' }}
+                className="text-blue-600 underline cursor-pointer font-semibold"
               >
                 Sign up now
               </span>
-            </>
+            </p>
           )}
-        </p>
+        </div>
       </form>
     </div>
   );
-};
-
-// Input style
-const inputStyle = {
-  width: '100%',
-  padding: '10px 12px',
-  border: '1px solid #ccc',
-  borderRadius: '6px',
-  marginTop: '6px',
-  fontSize: '15px',
-  outline: 'none',
 };
 
 export default Login;

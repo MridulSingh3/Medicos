@@ -46,6 +46,8 @@ const registerUser = async (req, res) => {
     return res.status(201).json({ success: true, token });
   } catch (error) {
     console.error('Registration error:', error);
+    console.error(error);
+    console.error(error.stack);
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
@@ -304,7 +306,7 @@ const listAppointment = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
 
-   const appointments = await appointmentModel.find({ userId }); // clean and safe
+    const appointments = await appointmentModel.find({ userId }); // clean and safe
 
     console.log("✅ Appointments fetched:", appointments.length);
     res.json({ success: true, appointments });

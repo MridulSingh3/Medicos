@@ -1,38 +1,62 @@
 import React, { useContext, useState } from 'react';
 import { AdminContext } from '../context/AdminContext';
-import axios from 'axios'
-import {toast} from 'react-toastify'
-
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [state, setState] = useState('Admin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const {setAToken, backendUrl} = useContext(AdminContext)
+  // Extract both Admin and Doctor contexts
+  const { setAToken, setDToken, backendUrl } = useContext(AdminContext);
 
- const onSubmit = async (e) => {
-  e.preventDefault();
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    if (state === 'Admin') {
-      const { data } = await axios.post(backendUrl + '/api/admin/login', { email, password });
+    try {
+      if (state === 'Admin') {
+        const { data } = await axios.post(`${backendUrl}/api/admin/login`, {
+          email,
+          password,
+        });
 
-    //   console.log('Response:', data); // ✅ Now safe to use
+        if (data.success) {
+          localStorage.setItem('aToken', data.token);
+          setAToken(data.token);
+          toast.success('Admin logged in successfully');
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        // Handle Doctor Login
+        const { data } = await axios.post(`${backendUrl}/api/doctor/login`, {
+          email,
+          password,
+        });
 
-      if (data.success) {
-        localStorage.setItem('aToken', data.token)
-        setAToken(data.token);
-      }else{
-        toast.error(data.message)
+        if (data.success) {
+          localStorage.setItem('dToken', data.token);
+          setDToken(data.token);
+          toast.success('Doctor logged in successfully');
+        } else {
+          toast.error(data.message);
+        }
       }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || 'Something went wrong. Please try again.';
+      toast.error(errorMessage);
+      console.error('Login error:', error);
     }
-  } catch (error) {
-    console.log('Login error:', error.response?.data || error.message);
-  }
-};
+  };
 
-
+  const handleRoleToggle = () => {
+    // Clear inputs when switching roles
+    setEmail('');
+    setPassword('');
+    setState((prevState) => (prevState === 'Admin' ? 'Doctor' : 'Admin'));
+  };
 
   const styles = {
     container: {
@@ -46,7 +70,7 @@ const Login = () => {
       backgroundColor: 'white',
       padding: '40px 30px',
       borderRadius: '12px',
-        boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4)',
+      boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4)',
       width: '350px',
       textAlign: 'center',
     },
@@ -71,6 +95,7 @@ const Login = () => {
       border: '1px solid #bbb',
       borderRadius: '6px',
       fontSize: '14px',
+      boxSizing: 'border-box',
     },
     button: {
       width: '100%',
@@ -82,9 +107,6 @@ const Login = () => {
       borderRadius: '6px',
       cursor: 'pointer',
       transition: 'background-color 0.3s ease',
-    },
-    buttonHover: {
-      backgroundColor: '#155ca4',
     },
     toggleText: {
       marginTop: '15px',
@@ -125,14 +147,13 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit" style={styles.button}>Login</button>
+        <button type="submit" style={styles.button}>
+          Login
+        </button>
 
         <p style={styles.toggleText}>
           {state === 'Admin' ? 'Doctor Login?' : 'Admin Login?'}{' '}
-          <span
-            style={styles.toggleLink}
-            onClick={() => setState(state === 'Admin' ? 'Docter' : 'Admin')}
-          >
+          <span style={styles.toggleLink} onClick={handleRoleToggle}>
             Click here
           </span>
         </p>

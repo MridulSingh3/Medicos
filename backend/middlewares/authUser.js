@@ -1,21 +1,27 @@
+// middlewares/authUser.js
 import jwt from 'jsonwebtoken';
 
 const authUser = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    // Read from header 'token' or 'authorization'
+    let token = req.headers.token || req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ success: false, message: 'Not Authorized. Login Again' });
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Not Authorized, login again' });
     }
 
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Strip "Bearer " if it was passed via standard Authorization header
+    if (token.startsWith('Bearer ')) {
+      token = token.slice(7, token.length).trim();
+    }
 
-    req.userId = decoded.id; // ✅ fixed: store userId on req, not req.body
+    const token_decode = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = token_decode.id;
+
     next();
   } catch (error) {
-    console.error('Auth Error:', error.message);
-    return res.status(401).json({ success: false, message: 'Token invalid or expired' });
+    console.log("Auth Middleware Error:", error.message);
+    return res.status(401).json({ success: false, message: 'Invalid or expired token' });
   }
 };
 

@@ -12,128 +12,84 @@ const Dashboard = () => {
   }, [aToken]);
 
   if (!dashData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-[60vh] text-gray-500 font-medium">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div style={styles.container}>
+    <div className="m-5 w-full max-w-6xl">
       {/* Summary Cards */}
-      <div style={styles.cardsContainer}>
-        <div style={styles.card}>
-          <img src={assets.doctor_icon} alt="Doctors" style={styles.icon} />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+
+        {/* Doctors Card */}
+        <div className="flex items-center gap-4 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+          <img src={assets.doctor_icon} alt="Doctors" className="w-14 h-14 bg-blue-50 p-3 rounded-lg" />
           <div>
-            <p style={styles.count}>{dashData.docters}</p>
-            <p style={styles.label}>Doctors</p>
+            <p className="text-2xl font-bold text-gray-800">{dashData.docters}</p>
+            <p className="text-sm font-medium text-gray-500">Doctors</p>
           </div>
         </div>
 
-        <div style={styles.card}>
-          <img src={assets.appointment_icon} alt="Appointments" style={styles.icon} />
+        {/* Appointments Card */}
+        <div className="flex items-center gap-4 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+          <img src={assets.appointment_icon} alt="Appointments" className="w-14 h-14 bg-blue-50 p-3 rounded-lg" />
           <div>
-            <p style={styles.count}>{dashData.appointments}</p>
-            <p style={styles.label}>Appointments</p>
+            <p className="text-2xl font-bold text-gray-800">{dashData.appointments}</p>
+            <p className="text-sm font-medium text-gray-500">Appointments</p>
           </div>
         </div>
 
-        <div style={styles.card}>
-          <img src={assets.patients_icon} alt="Patients" style={styles.icon} />
+        {/* Patients Card */}
+        <div className="flex items-center gap-4 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+          <img src={assets.patients_icon} alt="Patients" className="w-14 h-14 bg-blue-50 p-3 rounded-lg" />
           <div>
-            <p style={styles.count}>{dashData.patients}</p>
-            <p style={styles.label}>Patients</p>
+            <p className="text-2xl font-bold text-gray-800">{dashData.patients}</p>
+            <p className="text-sm font-medium text-gray-500">Patients</p>
           </div>
         </div>
+
       </div>
 
       {/* Latest Appointments Section */}
-      <div style={styles.latestHeader}>
-        <img src={assets.list_icon} alt="Latest Appointments" style={styles.icon} />
-        <p style={styles.latestTitle}>Latest Appointments</p>
-      </div>
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
 
-      <div style={styles.appointmentsList}>
-        {dashData.latestAppointments.map((item, index) => (
-  <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-    <img 
-      src={(item.docData?.image) || 'https://placehold.co/100x100'} 
-      alt="Doctor" 
-      style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginRight: '1rem' }}
-    />
-    <div>
-      <p><strong>Doctor:</strong> {item.docData?.name || 'Unknown'}</p>
-      <p><strong>Patient:</strong> {item.userData?.name || 'Unknown'}</p>
-      <p><strong>Time:</strong> {item.date} {item.time}</p>
-    </div>
-  </div>
-))}
+        <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+          <img src={assets.list_icon} alt="Latest Appointments" className="w-5 h-5" />
+          <p className="font-semibold text-gray-800">Latest Appointments</p>
+        </div>
+
+        <div className="divide-y divide-gray-100">
+          {dashData.latestAppointments.map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/80 transition-colors"
+            >
+              <img
+                src={item.docData?.image || 'https://placehold.co/100x100'}
+                alt="Doctor"
+                className="w-12 h-12 rounded-full object-cover border border-gray-200 bg-gray-100"
+              />
+              <div className="flex-1 text-sm">
+                <p className="font-medium text-gray-800">
+                  Doctor: <span className="text-gray-600 font-normal">{item.docData?.name || 'Unknown'}</span>
+                </p>
+                <p className="font-medium text-gray-800">
+                  Patient: <span className="text-gray-600 font-normal">{item.userData?.name || 'Unknown'}</span>
+                </p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Time: {item.date} {item.time}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
 
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    padding: '2rem',
-    fontFamily: 'Arial, sans-serif',
-  },
-  cardsContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: '2rem',
-    gap: '1.5rem',
-  },
-  card: {
-    flex: 1,
-    padding: '1rem',
-    borderRadius: '10px',
-    backgroundColor: '#f0f8ff',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-  },
-  icon: {
-    width: '50px',
-    height: '50px',
-  },
-  count: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-  },
-  label: {
-    fontSize: '14px',
-    color: '#666',
-  },
-  latestHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '1rem',
-    gap: '0.5rem',
-  },
-  latestTitle: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-  },
-  appointmentsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-  },
-  appointmentCard: {
-    display: 'flex',
-    gap: '1rem',
-    alignItems: 'center',
-    padding: '1rem',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    backgroundColor: '#fafafa',
-  },
-  appointmentImage: {
-    width: '80px',
-    height: '80px',
-    borderRadius: '8px',
-    objectFit: 'cover',
-  },
 };
 
 export default Dashboard;

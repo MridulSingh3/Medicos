@@ -1,145 +1,79 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 
 const TopDocters = () => {
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
-
-  // ✅ Fixed variable name from docters → doctors
   const { doctors } = useContext(AppContext);
 
-  const containerStyle = {
-    textAlign: 'center',
-    padding: '40px 20px',
-  };
-
-  const gridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '20px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    marginTop: '30px',
-  };
-
-  const cardStyle = {
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '16px',
-    textAlign: 'center',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    cursor: 'pointer',
-  };
-
-  const cardHoverStyle = {
-    transform: 'translateY(-10px) scale(1.02)',
-    boxShadow: '0 10px 15px rgba(0, 0, 0, 0.1)',
-  };
-
-  const imgStyle = {
-    width: '100px',
-    height: '100px',
-    objectFit: 'cover',
-    borderRadius: '50%',
-    marginBottom: '12px',
-  };
-
-  const moreButtonStyle = {
-    marginTop: '40px',
-    padding: '10px 20px',
-    backgroundColor: '#007BFF',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease, transform 0.2s ease',
-  };
-
-  const moreButtonHoverStyle = {
-    backgroundColor: '#0056b3',
-    transform: 'translateY(-2px)',
-  };
-
   return (
-    <div style={containerStyle}>
-      <h1>Top Doctors to Book</h1>
-      <p>Simply browse through our extensive list of trusted doctors.</p>
+    <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
+      {/* Title & Description */}
+      <h1 className="text-3xl font-bold text-gray-800">Top Doctors to Book</h1>
+      <p className="sm:w-1/3 text-center text-sm text-gray-500">
+        Simply browse through our extensive list of trusted doctors.
+      </p>
 
-      <div style={gridStyle}>
-        {doctors.slice(0, 10).map((doc, index) => (
+      {/* Doctors Grid */}
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 pt-5 gap-y-8 px-3 sm:px-0 max-w-7xl">
+        {doctors?.slice(0, 10).map((doc) => (
           <div
             key={doc._id}
-            style={{
-              ...cardStyle,
-              ...(hoveredIndex === index ? cardHoverStyle : {}),
+            onClick={() => {
+              navigate(`/appointment/${doc._id}`);
+              window.scrollTo(0, 0);
             }}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            onClick={() => navigate(`/appointment/${doc._id}`)}
+            className="border border-blue-100 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2.5 transition-all duration-300 bg-white hover:shadow-xl group flex flex-col justify-between"
           >
-            <img src={doc.image} alt={doc.name} style={imgStyle} />
+            {/* Image Wrapper */}
+            <div className="bg-blue-50/60 flex justify-center items-center pt-6 pb-2">
+              <img
+                src={doc.image}
+                alt={doc.name}
+                className="w-24 h-24 rounded-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-md ring-4 ring-white"
+              />
+            </div>
 
-            <h3 style={{
-              fontFamily: `'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif`,
-              fontSize: '1.2rem',
-              fontWeight: '600',
-              marginBottom: '6px',
-              color: '#333'
-            }}>
-              {doc.name}
-            </h3>
+            {/* Card Content */}
+            <div className="p-5 text-center flex-1 flex flex-col justify-between">
+              <div>
+                {/* Availability Badge */}
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ${doc.available !== false ? 'bg-emerald-500' : 'bg-rose-500'
+                      }`}
+                  ></span>
+                  <p
+                    className={`text-xs font-semibold ${doc.available !== false ? 'text-emerald-600' : 'text-rose-600'
+                      }`}
+                  >
+                    {doc.available !== false ? 'Available' : 'Not Available'}
+                  </p>
+                </div>
 
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#555',
-              marginBottom: '10px',
-              fontWeight: '500'
-            }}>
-              {doc.speciality}
-            </p>
-
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              marginTop: '10px'
-            }}>
-              <div style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                backgroundColor: doc.available ? '#28a745' : '#dc3545',
-                border: '2px solid ' + (doc.available ? '#28a745' : '#dc3545'),
-              }}></div>
-              <span style={{
-                fontSize: '0.9rem',
-                fontWeight: '600',
-                color: doc.available ? '#28a745' : '#dc3545'
-              }}>
-                {doc.available ? 'Available' : 'Not Available'}
-              </span>
+                {/* Doctor Details */}
+                <h3 className="text-gray-800 text-lg font-bold group-hover:text-blue-600 transition-colors line-clamp-1">
+                  {doc.name}
+                </h3>
+                <p className="text-gray-500 text-xs font-medium mt-1">
+                  {doc.speciality}
+                </p>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div>
-        <button
-          onClick={() => navigate('/doctors')}  // ✅ ensure this matches your actual route
-          style={{
-            ...moreButtonStyle,
-            ...(isHovered ? moreButtonHoverStyle : {})
-          }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          More
-        </button>
-      </div>
+      {/* More Button */}
+      <button
+        onClick={() => {
+          navigate('/doctors');
+          window.scrollTo(0, 0);
+        }}
+        className="bg-blue-50 text-blue-600 font-semibold px-12 py-3 rounded-full mt-10 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md active:scale-95"
+      >
+        More
+      </button>
     </div>
   );
 };

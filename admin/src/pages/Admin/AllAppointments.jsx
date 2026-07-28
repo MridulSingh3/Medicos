@@ -3,21 +3,22 @@ import { AdminContext } from '../../context/AdminContext';
 
 const AllAppointments = () => {
   const { aToken, getAllAppointments, appointments } = useContext(AdminContext);
+
   const calculateAge = (dob) => {
-  if (!dob) return 'N/A';
-  const birthDate = new Date(dob);
-  if (isNaN(birthDate.getTime())) return 'N/A';
+    if (!dob) return 'N/A';
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return 'N/A';
 
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
 
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
 
-  return age;
-};
+    return age;
+  };
 
   useEffect(() => {
     if (aToken) {
@@ -26,98 +27,78 @@ const AllAppointments = () => {
   }, [aToken]);
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>All Appointments</h2>
+    <div className="w-full max-w-6xl m-5">
+      <p className="mb-3 text-lg font-semibold text-gray-800">All Appointments</p>
 
-      <div style={styles.gridHeader}>
-        <p>#</p>
-        <p>Patient</p>
-        <p>Age</p>
-        <p>Date & Time</p>
-        <p>Doctor</p>
-        <p>Fees</p>
-        <p>Actions</p>
-      </div>
+      <div className="bg-white border border-gray-200 rounded-lg text-sm max-h-[80vh] min-h-[60vh] overflow-y-scroll shadow-sm">
 
-      {appointments.map((item, index) => (
-        <div key={index} style={styles.gridRow}>
-          <p>{index + 1}</p>
-
-          <div style={styles.profile}>
-            <img
-              src={item.userData?.image}
-              alt="patient"
-              style={styles.img}
-            />
-            <span>{item.userData?.name || 'N/A'}</span>
-          </div>
-
-         <p>{calculateAge(item.userData?.dob)}</p>
-
-          <p>{new Date(item.date).toLocaleString()}</p>
-
-          <div style={styles.profile}>
-            <img
-              src={item.docData?.image}
-              alt="doctor"
-              style={styles.img}
-            />
-            <span>{item.docData?.name || 'N/A'}</span>
-          </div>
-
-          <p>₹{item.amount || 'N/A'}</p>
-          <button style={styles.btn}>View</button>
+        {/* Table / Grid Header */}
+        <div className="hidden sm:grid grid-cols-[0.5fr_2fr_1fr_3fr_3fr_1fr_1fr] grid-flow-col py-3.5 px-6 border-b border-gray-200 bg-gray-50 font-semibold text-gray-700">
+          <p>#</p>
+          <p>Patient</p>
+          <p>Age</p>
+          <p>Date & Time</p>
+          <p>Doctor</p>
+          <p>Fees</p>
+          <p>Actions</p>
         </div>
-      ))}
+
+        {/* List Items */}
+        {appointments.map((item, index) => (
+          <div
+            key={index}
+            className="flex flex-col sm:grid sm:grid-cols-[0.5fr_2fr_1fr_3fr_3fr_1fr_1fr] items-center text-gray-600 py-3 px-6 border-b border-gray-100 hover:bg-gray-50 transition-colors gap-2 sm:gap-0"
+          >
+            {/* Index */}
+            <p className="hidden sm:block font-medium">{index + 1}</p>
+
+            {/* Patient Info */}
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <img
+                src={item.userData?.image}
+                alt="patient"
+                className="w-9 h-9 rounded-full object-cover border border-gray-200"
+              />
+              <span className="font-medium text-gray-800">{item.userData?.name || 'N/A'}</span>
+            </div>
+
+            {/* Age */}
+            <p className="w-full sm:w-auto text-xs sm:text-sm">
+              <span className="sm:hidden font-semibold">Age: </span>
+              {calculateAge(item.userData?.dob)}
+            </p>
+
+            {/* Date & Time */}
+            <p className="w-full sm:w-auto text-xs sm:text-sm">
+              {new Date(item.date).toLocaleString()}
+            </p>
+
+            {/* Doctor Info */}
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <img
+                src={item.docData?.image}
+                alt="doctor"
+                className="w-9 h-9 rounded-full object-cover border border-gray-200 bg-gray-100"
+              />
+              <span className="text-gray-800">{item.docData?.name || 'N/A'}</span>
+            </div>
+
+            {/* Fees */}
+            <p className="w-full sm:w-auto font-medium text-gray-800">
+              ₹{item.amount || 'N/A'}
+            </p>
+
+            {/* Actions */}
+            <div className="w-full sm:w-auto flex justify-start sm:justify-center">
+              <button className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm">
+                View
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-  },
-  title: {
-    marginBottom: '16px',
-    fontSize: '24px',
-    color: '#333',
-  },
-  gridHeader: {
-    display: 'grid',
-    gridTemplateColumns: '40px 1fr 60px 180px 1fr 80px 100px',
-    fontWeight: 'bold',
-    backgroundColor: '#f2f2f2',
-    padding: '10px',
-    borderBottom: '2px solid #ccc',
-  },
-  gridRow: {
-    display: 'grid',
-    gridTemplateColumns: '40px 1fr 60px 180px 1fr 80px 100px',
-    alignItems: 'center',
-    padding: '10px',
-    borderBottom: '1px solid #ddd',
-  },
-  profile: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  img: {
-    width: '35px',
-    height: '35px',
-    borderRadius: '50%',
-    objectFit: 'cover',
-    border: '1px solid #ccc',
-  },
-  btn: {
-    padding: '6px 12px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
 };
 
 export default AllAppointments;

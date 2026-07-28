@@ -1,85 +1,80 @@
 import React from 'react';
 
 const Footer = () => {
-  const footerContainer = {
-    backgroundColor: '#f8f9fa',
-    padding: '10px 20px', // Reduced padding
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    borderTop: '1px solid #ccc',
-  };
-
-  const sectionStyle = {
-    flex: '1 1 200px',
-    margin: '5px 10px',        // Smaller margins
-    lineHeight: '1.4',         // Tighter line height
-    fontSize: '16px',          // Increased font size
-    color: '#333',
-  };
-
-  const listStyle = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  };
-
-  const listItemStyle = {
-    marginBottom: '4px',       // Less spacing between list items
-  };
-
-  const headingStyle = {
-    fontWeight: 'bold',
-    marginBottom: '6px',
-    fontSize: '17px',
-  };
-
-  const copyrightStyle = {
-    textAlign: 'center',
-    padding: '10px 0 5px',
-    backgroundColor: '#f1f1f1',
-    fontSize: '14px',
-    color: '#555',
-    marginTop: '10px',
-  };
-
   return (
-    <div>
-      <div style={footerContainer}>
-        {/* Left Section */}
-        <div style={sectionStyle}>
-          <p>
-            Medicos offers quality healthcare and expert consultation with modern facilities.
+    <footer className="bg-gray-50 pt-10 pb-6 px-6 lg:px-16 border-t border-gray-200 text-gray-600 text-sm">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
+
+        {/* Left Section: Branding & About */}
+        <div className="md:w-2/5 space-y-3">
+          <div className="flex items-center space-x-2">
+            <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+              +
+            </div>
+            <span className="text-xl font-bold text-gray-800 tracking-tight">
+              Medicos
+            </span>
+          </div>
+          <p className="text-gray-500 leading-relaxed text-sm max-w-sm">
+            Medicos offers quality healthcare and expert consultation with modern facilities to ensure the best care for you and your family.
           </p>
         </div>
 
-        {/* Center Section */}
-        <div style={sectionStyle}>
-          <p style={headingStyle}>COMPANY</p>
-          <ul style={listStyle}>
-            <li style={listItemStyle}>Home</li>
-            <li style={listItemStyle}>About Us</li>
-            <li style={listItemStyle}>Contact</li>
-            <li style={listItemStyle}>Privacy</li>
+        {/* Center Section: Company Links */}
+        <div className="space-y-3">
+          <p className="font-bold text-gray-800 uppercase tracking-wider text-xs">
+            Company
+          </p>
+          <ul className="space-y-2 font-medium">
+            <li>
+              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+                About Us
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+                Contact
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-blue-600 transition-colors duration-200">
+                Privacy
+              </a>
+            </li>
           </ul>
         </div>
 
-        {/* Right Section */}
-        <div style={sectionStyle}>
-          <p style={headingStyle}>GET IN TOUCH</p>
-          <ul style={listStyle}>
-            <li style={listItemStyle}>+91-9016000016</li>
-            <li style={listItemStyle}>premmdevloper@gmail.com</li>
+        {/* Right Section: Contact Info */}
+        <div className="space-y-3">
+          <p className="font-bold text-gray-800 uppercase tracking-wider text-xs">
+            Get In Touch
+          </p>
+          <ul className="space-y-2 font-medium">
+            <li>
+              <a href="tel:+919016000016" className="hover:text-blue-600 transition-colors duration-200">
+                +91-9016000016
+              </a>
+            </li>
+            <li>
+              <a href="mailto:premmdevloper@gmail.com" className="hover:text-blue-600 transition-colors duration-200">
+                premmdevloper@gmail.com
+              </a>
+            </li>
           </ul>
         </div>
+
       </div>
 
-      {/* Copyright */}
-      <div style={copyrightStyle}>
-        <hr style={{ margin: '0 auto 8px', width: '90%', borderColor: '#ccc' }} />
-        <p>© 2025 Medicos — All Rights Reserved</p>
+      {/* Divider & Copyright */}
+      <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-gray-200 text-center text-xs text-gray-400">
+        <p>© 2025 Medicos — All Rights Reserved.</p>
       </div>
-    </div>
+    </footer>
   );
 };
 

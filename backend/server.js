@@ -23,8 +23,9 @@ app.use(cors());
 
 // API Routes
 app.use('/api/admin', adminRouter);
-app.use('/api/doctor', doctorRouter); // 🔄 Use "doctor" in route path, not "docter"
 app.use('/api/user', userRouter);
+
+app.use('/api/doctor', doctorRouter); // 🔄 Use "doctor" in route path, not "docter"
 
 app.get('/', (req, res) => res.send('API Working'));
 

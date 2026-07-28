@@ -4,64 +4,41 @@ import { Link } from 'react-router-dom';
 
 const SpecialityMenu = () => {
   return (
-    <div
+    <section
       id="speciality"
-      style={{
-        padding: '40px 20px 60px',
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
+      className="flex flex-col items-center py-16 px-6 text-center max-w-7xl mx-auto"
     >
-      <h1 style={{ fontSize: '28px', marginBottom: '12px' }}>Find by Speciality</h1>
-      <p
-        style={{
-          maxWidth: '600px',
-          marginBottom: '32px',
-          color: '#555',
-        }}
-      >
+      {/* Heading & Subtitle */}
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+        Find by Speciality
+      </h2>
+      <p className="sm:w-1/3 text-gray-500 text-sm mt-2 mb-10 leading-relaxed">
         Simply browse through our extensive list of trusted doctors, schedule your appointments hassle-free.
       </p>
 
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '32px',
-          justifyContent: 'center',
-        }}
-      >
+      {/* Specialities List */}
+      <div className="flex sm:justify-center gap-6 sm:gap-8 pt-5 w-full overflow-x-auto scrollbar-none pb-4">
         {specialityData.map((item, index) => (
-          // <Link
-          //   key={index}
-          //   to={`/docters/${item.speciality}`}
-          //   style={{ textDecoration: 'none', color: 'black' }}
-          // >
-          //   <div style={{ textAlign: 'center' }}>
-          //     <img
-          //       src={item.image}
-          //       alt={item.speciality}
-          //       style={{ width: '80px', height: '80px', marginBottom: '8px' }}
-          //     />
-          //     <p>{item.speciality}</p>
-          //   </div>
-          // </Link>
           <Link
-  key={index}
-  to={`/docters/${item.slug}`}
-  style={{ textDecoration: 'none', color: 'black' }}
->
-  <div style={{ textAlign: 'center' }}>
-    <img src={item.image} alt={item.speciality} style={{ width: '80px', height: '80px', marginBottom: '8px' }} />
-    <p>{item.speciality}</p>
-  </div>
-</Link>
-
+            key={index}
+            to={`/doctors/${item.slug || item.speciality}`}
+            onClick={() => window.scrollTo(0, 0)}
+            className="flex flex-col items-center text-xs cursor-pointer flex-shrink-0 hover:-translate-y-2 transition-all duration-300 group"
+          >
+            <div className="w-16 h-16 sm:w-20 sm:y-20 rounded-full bg-blue-50 flex items-center justify-center p-3 mb-2 shadow-sm group-hover:bg-blue-600 transition-colors duration-300">
+              <img
+                src={item.image}
+                alt={item.speciality}
+                className="w-full h-full object-contain group-hover:brightness-200 transition-all"
+              />
+            </div>
+            <p className="font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
+              {item.speciality}
+            </p>
+          </Link>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

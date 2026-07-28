@@ -1,32 +1,48 @@
 import React, { useContext, useEffect } from 'react';
 import { AdminContext } from '../../context/AdminContext';
 
-const DoctersList = () => {
-  const { docters, aToken, getAllDocters, changeAvailablity } = useContext(AdminContext);
+const DoctorsList = () => {
+  // Support both 'doctors' and legacy 'docters' typo variable names safely
+  const contextData = useContext(AdminContext);
+  const doctorsList = contextData.doctors || contextData.docters || [];
+  const { aToken, getAllDocters, getAllDoctors, changeAvailablity } = contextData;
 
   useEffect(() => {
     if (aToken) {
-      getAllDocters();
+      // Call whichever function is defined in context
+      if (getAllDoctors) getAllDoctors();
+      else if (getAllDocters) getAllDocters();
     }
   }, [aToken]);
 
   return (
     <div style={{ padding: '2rem' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem', textAlign: 'center' }}>All Doctors</h1>
+      <h1 style={{ fontSize: '2rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+        All Doctors
+      </h1>
+
       <div style={styles.grid}>
-        {docters.map((item, index) => (
-          <div key={index} style={styles.card} className="doctor-card">
+        {doctorsList.map((item) => (
+          <div key={item._id} style={styles.card} className="doctor-card">
             <img src={item.image} alt={item.name} style={styles.image} />
             <div style={styles.info}>
               <h2 style={styles.name}>{item.name}</h2>
               <p style={styles.speciality}>{item.speciality}</p>
-              <div style={{ marginTop: '0.5rem' }}>
+
+              <div style={styles.availabilityGroup}>
                 <input
                   type="checkbox"
+                  id={`avail-${item._id}`}
                   checked={item.available}
                   onChange={() => changeAvailablity(item._id)}
+                  style={{ cursor: 'pointer' }}
                 />
-                <label style={{ marginLeft: '0.5rem' }}>Available</label>
+                <label
+                  htmlFor={`avail-${item._id}`}
+                  style={{ marginLeft: '0.5rem', cursor: 'pointer' }}
+                >
+                  Available
+                </label>
               </div>
             </div>
           </div>
@@ -35,12 +51,13 @@ const DoctersList = () => {
 
       <style>{`
         .doctor-card {
-          transition: background 0.3s ease, color 0.3s ease;
+          transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
         }
 
         .doctor-card:hover {
           background-color: #007bff;
           color: white;
+          transform: translateY(-2px);
         }
 
         .doctor-card:hover h2,
@@ -82,7 +99,6 @@ const styles = {
     boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
     textAlign: 'center',
     padding: '1rem',
-    cursor: 'pointer',
   },
   image: {
     width: '100%',
@@ -101,6 +117,12 @@ const styles = {
     color: '#555',
     marginBottom: '0.5rem',
   },
+  availabilityGroup: {
+    marginTop: '0.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 };
 
-export default DoctersList;
+export default DoctorsList;

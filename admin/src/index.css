@@ -1,0 +1,7 @@
+@import "tailwindcss";
+/* Agar Tailwind v4 use kar rahe hain */
+
+/* YA agar Tailwind v3 use kar rahe hain: */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
