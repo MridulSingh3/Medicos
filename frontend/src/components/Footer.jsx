@@ -57,12 +57,12 @@ const Footer = () => {
           <ul className="space-y-2 font-medium">
             <li>
               <a href="tel:+919016000016" className="hover:text-blue-600 transition-colors duration-200">
-                +91-9016000016
+                +91-8445698310
               </a>
             </li>
             <li>
               <a href="mailto:premmdevloper@gmail.com" className="hover:text-blue-600 transition-colors duration-200">
-                premmdevloper@gmail.com
+                mriduldhakad@gmail.com
               </a>
             </li>
           </ul>
